@@ -3,10 +3,10 @@ A utility to send formatted json responses as an express response
 
 ## Usage
 
-```js
+``` js
 
 const express = require('express')
-const Api = require('api-formatter')
+const Api = require('api-formatter').Api
 
 let app = express()
 
@@ -26,7 +26,7 @@ app.get('/wip', (req, res) => {
 
 // Automatically catching errors
 app.get('/bad', (req, res) => {
-  req.api.catchErrors(api => {
+  req.api.catch(api => {
     throw new Error('Something went wrong :S')
   })
 })

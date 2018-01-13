@@ -1,6 +1,6 @@
 
 const expect = require('chai').expect
-const Api = require('../../lib')
+const Api = require('../../lib').Api
 
 const RequestMock = require('../mock/request.mock')
 const ResponseMock = require('../mock/response.mock')
@@ -97,7 +97,7 @@ describe('Api', function() {
     })
   })
   
-  describe('#catchErrors', function() {
+  describe('#catch', function() {
     
     let api
     beforeEach(async function() {
@@ -105,7 +105,7 @@ describe('Api', function() {
     })
     
     it('should send errors', async function() {
-      await api.catchErrors(() => {
+      await api.catch(() => {
         throw new Error('test')
       })
       
@@ -117,7 +117,7 @@ describe('Api', function() {
       let args = null
       let hook = (...passed) => { args = passed }
       
-      await api.catchErrors(() => { throw error }, hook)
+      await api.catch(() => { throw error }, hook)
       
       expect(args[0]).to.equal(error)
       expect(args[1]).to.equal(api)
