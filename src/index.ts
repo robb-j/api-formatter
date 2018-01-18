@@ -10,22 +10,29 @@ export class MetaBlock {
   public name?: String
   public version?: String
   
-  constructor(success: Boolean, messages: String[], status: Number, api: Api) {
+  constructor(success: Boolean, messages: Messages, status: Number, api: Api) {
     this.success = success
-    this.messages = messages
+    this.messages = (messages instanceof String) ? [messages] : messages
     this.status = status
     this.name = api.name
     this.version = api.version
   }
 }
 
+export interface IApiOptions {
+  name?: String
+  version?: String
+  httpFail?: Boolean
+}
+
 /** A class for creating a json envelope for sending api responses */
 export class Api {
   
   /** Creates an express middleware that adds req.api & res.api instances */
-  static middleware(name: String = null, version: String = null) {
+  // static middleware(name: String = null, version: String = null) {
+  static middleware(options: IApiOptions) {
     return (req: any, res: any, next: () => void) => {
-      let api = new this(req, res, name, version)
+      let api = new this(req, res, options)
       req.api = api
       res.api = api
       next()
@@ -36,37 +43,32 @@ export class Api {
   private res: any
   public name?: String
   public version?: String
+  public httpFail: Boolean
   
   /** Creates a new Api instance from an Express responses */
-  constructor(req: any, res: any, name?: String, version?: String) {
+  constructor(req: any, res: any, options: IApiOptions = {}) {
     this.req = req
     this.res = res
-    this.name = name
-    this.version = version
-  }
-  
-  /** Creates a new meta block */
-  private makeMetaBlock(isSuccessful: Boolean, messages: Messages, status: Number) {
-    return new MetaBlock(
-      isSuccessful,
-      (messages instanceof String) ? [messages] : messages,
-      status,
-      this
-    )
+    this.name = options.name || null
+    this.version = options.version || process.env.npm_package_version || null
+    this.httpFail = options.httpFail === undefined ? true : options.httpFail
   }
   
   /** Sends an api failure */
-  public sendFail(messages: Messages, status: Number = 400) {
+  public sendFail(messages: Messages, status?: Number) {
+    if (status === undefined) {
+      status = this.httpFail ? 400 : 200
+    }
     this.res.status(status).send({
-      meta: this.makeMetaBlock(false, messages, status),
+      meta: new MetaBlock(false, messages, status, this),
       data: null
     })
   }
   
   /** Sends a data response */
-  public sendData(data: any, status: Number) {
+  public sendData(data: any, status: Number = 200) {
     this.res.status(status).send({
-      meta: this.makeMetaBlock(true, [], status),
+      meta: new MetaBlock(true, [], status, this),
       data: data
     })
   }
