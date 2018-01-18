@@ -49,7 +49,7 @@ export class Api {
   constructor(req: any, res: any, options: IApiOptions = {}) {
     this.req = req
     this.res = res
-    this.name = options.name || null
+    this.name = options.name || process.env.npm_package_name || null
     this.version = options.version || process.env.npm_package_version || null
     this.httpFail = options.httpFail === undefined ? true : options.httpFail
   }

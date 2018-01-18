@@ -12,7 +12,7 @@ let app = express()
 
 
 // Register the middleware
-app.use(Api.middleware('My Fancy Api', '0.1.2'))
+app.use(Api.middleware({ name: 'My Fancy Api' }))
 
 // Sending formatted data
 app.get('/', (req, res) => {
@@ -63,3 +63,11 @@ app.get('/bad', (req, res) => {
   "data": null
 }
 ```
+
+## Middleware options
+
+| Name        | Use |
+| ----------- | --- |
+| `name`      | The name of your api, defaults to your `package.json` name |
+| `version`   | The version of your api, defaults to your `package.json` version |
+| `httpError` | Whether a failed response should return a HTTP/400, defaults to true |
