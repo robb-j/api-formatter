@@ -12,7 +12,7 @@ export class MetaBlock {
   
   constructor(success: Boolean, messages: Messages, status: Number, api: Api) {
     this.success = success
-    this.messages = (messages instanceof String) ? [messages] : messages
+    this.messages = (typeof messages === 'string') ? [<String>messages] : <String[]>messages
     this.status = status
     this.name = api.name
     this.version = api.version
