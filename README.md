@@ -1,15 +1,14 @@
 # Api Middleware
+
 A utility to send formatted json responses as an express response
 
 ## Usage
 
-``` js
-
+```js
 const express = require('express')
 const Api = require('api-formatter').Api
 
 let app = express()
-
 
 // Register the middleware
 app.use(Api.middleware({ name: 'My Fancy Api' }))
@@ -54,9 +53,7 @@ app.get('/bad', (req, res) => {
 {
   "meta": {
     "success": false,
-    "messages": [
-      "Something went wrong :S"
-    ],
+    "messages": ["Something went wrong :S"],
     "name": "My Fancy Api",
     "version": "0.1.2"
   },
@@ -66,8 +63,8 @@ app.get('/bad', (req, res) => {
 
 ## Middleware options
 
-| Name        | Use |
-| ----------- | --- |
-| `name`      | The name of your api, defaults to your `package.json` name |
-| `version`   | The version of your api, defaults to your `package.json` version |
+| Name        | Use                                                                  |
+| ----------- | -------------------------------------------------------------------- |
+| `name`      | The name of your api, defaults to your `package.json` name           |
+| `version`   | The version of your api, defaults to your `package.json` version     |
 | `httpError` | Whether a failed response should return a HTTP/400, defaults to true |
