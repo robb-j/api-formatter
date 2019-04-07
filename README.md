@@ -68,3 +68,58 @@ app.get('/bad', (req, res) => {
 | `name`      | The name of your api, defaults to your `package.json` name           |
 | `version`   | The version of your api, defaults to your `package.json` version     |
 | `httpError` | Whether a failed response should return a HTTP/400, defaults to true |
+
+## A Full example
+
+```ts
+import express from 'express'
+import { Api } from 'api-formatter'
+
+let app = express()
+
+app.use(Api.middleware({ name: 'dogs-api', version: 'v1' }))
+
+app.get('/', (req, res) => {
+  res.api.sendData({ msg: 'Hey!' })
+})
+
+app.get('/error', (req, res) => {
+  res.api.sendFail(['Oops, something went wrong :S'])
+})
+
+app.listen(3000, () => console.log('Listening on :3000'))
+```
+
+The success response will be:
+
+> `GET http://localhost:3000` → http/200
+
+```json
+{
+  "meta": {
+    "success": true,
+    "messages": [],
+    "status": 200,
+    "name": "dogs-api",
+    "version": "v1"
+  },
+  "data": { "msg": "Hey!" }
+}
+```
+
+And the fail response will be:
+
+> `GET http://localhost:3000/error` → http/400
+
+```json
+{
+  "meta": {
+    "success": false,
+    "messages": ["Oops, something went wrong :S"],
+    "status": 400,
+    "name": "dogs-api",
+    "version": "v1"
+  },
+  "data": null
+}
+```
