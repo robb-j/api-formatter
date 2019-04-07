@@ -1,4 +1,5 @@
 # Api Middleware
+[![CircleCI](https://circleci.com/gh/robb-j/api-formatter.svg?style=svg)](https://circleci.com/gh/robb-j/api-formatter)
 
 A utility to send formatted json responses as an express response
 
