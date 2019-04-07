@@ -1,6 +1,6 @@
 {
   "name": "api-formatter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "Format json responses in a meta-data structure",
   "main": "dist/index.js",
