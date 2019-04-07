@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class MetaBlock {
     constructor(success, messages, status, api) {
         this.success = success;
-        this.messages = (typeof messages === 'string') ? [messages] : messages;
+        this.messages = typeof messages === 'string' ? [messages] : messages;
         this.status = status;
         this.name = api.name;
         this.version = api.version;
@@ -27,13 +27,16 @@ class Api {
         this.req = req;
         this.res = res;
         this.name = options.name || process.env.npm_package_name || undefined;
-        this.version = options.version || process.env.npm_package_version || undefined;
+        this.version =
+            options.version || process.env.npm_package_version || undefined;
         this.httpFail = options.httpFail === undefined ? true : options.httpFail;
     }
     /** Sends an api failure */
     sendFail(messages, status) {
         status = this.pickStatusCode(status);
-        this.res.status(status).send(this.makeEnvelope(false, messages, status, null));
+        this.res
+            .status(status)
+            .send(this.makeEnvelope(false, messages, status, null));
     }
     /** Sends a data response */
     sendData(data, status = 200) {
@@ -51,9 +54,7 @@ class Api {
         }
     }
     pickStatusCode(status) {
-        return status === undefined
-            ? this.httpFail ? 400 : 200
-            : status;
+        return status === undefined ? (this.httpFail ? 400 : 200) : status;
     }
     makeEnvelope(success, messages, status, data) {
         return {

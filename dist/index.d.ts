@@ -1,6 +1,16 @@
 export declare type Messages = string[] | string;
 export declare type CatchBlock = (api: Api) => void;
 export declare type ErrorHook = (error: Error, api?: Api) => void;
+declare global {
+  namespace Express {
+    interface Request {
+      api: Api;
+    }
+    interface Response {
+      api: Api;
+    }
+  }
+}
 export declare class MetaBlock {
     success: boolean;
     messages: string[];
